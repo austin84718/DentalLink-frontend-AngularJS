@@ -1,0 +1,262 @@
+            <header class="page-header">
+                <h1>Admin</h1>
+                <p class="page-subheader">Manage your account details.</p>
+            </header><!-- .page-header -->
+
+            <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.message}}</alert>
+
+            <div class="box-white">
+            
+                <div class="row">
+                
+                	<div class="responsive-tab-content">
+                    
+                    	<!-- Nav Tabs -->
+                        <tabset id="adminTabContent" justified="true">
+                        <tab>
+                            <tab-heading>
+                                <span class="dlicons-user"></span> Account
+                            </tab-heading>
+                            <!-- Account Tab -->
+                            <div id="admintabAccount" >
+                                <form edit-form id="formAccountTab" name="accountForm">
+                                    <div class="block-title">
+                                        <h2>Account</h2>
+                                        <button type="button" toggle-edit class="btn btn-orange btn-toggle btn-edit" data-toggle="tooltip" data-placement="top" title="Edit this section"><span class="dlicons-pencil"></span></button>
+                                        <button type="button" ng-click="savePractice(accountForm)" class="btn btn-green btn-toggle btn-save hide" data-toggle="tooltip" data-placement="top" title="Save changes"><span class="dlicons-check"></span></button>
+                                    </div>
+
+                                    <div id="sectPersonal" class="section-block">
+                                        <h3>Personal Information</h3>
+
+                                        <div class="input-block-inline">
+                                            <select id="selectSalutation" name="salutation" ng-model="practice.salutation" class="form-control data1" disabled="disabled">
+                                                <option selected="selected" disabled="disabled" class="placeholder" value="default">Select salutation</option>
+                                                <option value="Mr.">Mr.</option>
+                                                <option value="Ms.">Ms.</option>
+                                                <option value="Mrs.">Mrs.</option>
+                                                <option value="Dr.">Dr.</option>
+                                                <option value="Engr.">Engr.</option>
+                                            </select>
+                                            <label for="selectSalutation">Salutation</label>
+                                        </div>
+
+                                        <div class="input-block-inline" ng-class="{'has-error': accountForm.account_first_name.$dirty && accountForm.account_first_name.$invalid }">
+                                            <input type="text" name="account_first_name" class="form-control data1" ng-model="practice.account_first_name" disabled="disabled" placeholder="Enter first name &hellip;" ng-required="true">
+                                            <label>First Name</label>
+                                        </div>
+
+                                        <div class="input-block-inline">
+                                            <input type="text" name="account_middle_initial" class="form-control data1" ng-model="practice.account_middle_initial" disabled="disabled" maxlength="1" placeholder="Enter middle initial &hellip;">
+                                            <label>Middle Initial</label>
+                                        </div>
+
+                                        <div class="input-block-inline" ng-class="{'has-error': accountForm.account_last_name.$dirty && accountForm.account_last_name.$invalid }">
+                                            <input type="text" name="account_last_name" class="form-control data1" ng-model="practice.account_last_name"  disabled="disabled" placeholder="Enter last name &hellip;" ng-required="true">
+                                            <label>Last Name</label>
+                                        </div>
+
+                                        <div class="input-block-inline-right" ng-class="{'has-error': accountForm.account_email.$dirty && accountForm.account_email.$invalid }">
+                                            <input type="email" name="account_email" class="form-control data1" ng-model="practice.account_email"  disabled="disabled" placeholder="Enter email &hellip;" ng-required="true">
+                                            <label>Email</label>
+                                        </div>
+                                    </div><!-- .section-block -->
+                                    <div id="sectPayment" class="section-block">
+                                        <h3>Payment Information</h3>
+
+                                        <div class="input-block-inline" ng-class="{'has-error': accountForm.name_on_card.$dirty && accountForm.name_on_card.$invalid }">
+                                            <input type="text" name="name_on_card" class="form-control data1" ng-model="practice.name_on_card"  disabled="disabled" placeholder="Enter name on card &hellip;">
+                                            <label>Name on Card</label>
+                                        </div>
+
+                                        <div class="input-block-inline" ng-class="{'has-error': accountForm.card_number.$dirty && accountForm.card_number.$invalid }">
+                                            <input type="text" name="card_number" class="form-control data1" ng-model="practice.card_number" disabled="disabled" placeholder="Enter card number &hellip;" payments-validate="card">
+                                            <label>Card Number</label>
+                                        </div>
+
+                                        <div class="input-block-inline">
+                                            <input type="text" class="form-control data1" ng-model="practice.card_cvc" disabled="disabled" placeholder="Enter cvc     &hellip;" payments-validate="cvc">
+                                            <label>CVC</label>
+                                        </div>
+
+                                        <div class="input-block-inline-right">
+                                            <select id="selectExpMM" ng-model="practice.card_exp_month" class="form-control data1" disabled="disabled">
+                                                <option selected="selected" disabled="disabled" class="placeholder" value="default">Select month</option>
+                                                <option value="1">01</option>
+                                                <option value="2">02</option>
+                                                <option value="3">03</option>
+                                                <option value="4">04</option>
+                                                <option value="5">05</option>
+                                                <option value="6">06</option>
+                                                <option value="7">07</option>
+                                                <option value="8">08</option>
+                                                <option value="9">09</option>
+                                                <option value="10">10</option>
+                                                <option value="11">11</option>
+                                                <option value="12">12</option>
+                                            </select>
+                                            <select id="selectExpYYYY" ng-model="practice.card_exp_year" ng-options="year as year for year in years" class="form-control data1" disabled="disabled">
+                                                <option disabled="disabled" class="placeholder" value="">Select year</option>
+                                            </select>
+                                            <label>Expiration Date</label>
+                                        </div>
+                                    </div><!-- .section-block -->
+
+                                </form>
+
+                            </div>
+
+                        </tab>
+
+                        <tab>
+                            <tab-heading>
+                                <span class="dlicons-office"></span> Practice
+                            </tab-heading>
+                            <!-- Practice Tab -->
+                            <div id="admintabPractice">
+                                <form edit-form id="formPracticeTab" name="practiceForm">
+                                    <div class="block-title">
+                                        <h2>Practice</h2>
+                                        <button type="button" toggle-edit class="btn btn-orange btn-toggle btn-edit" data-toggle="tooltip" data-placement="top" title="Edit this section"><span class="dlicons-pencil"></span></button>
+                                        <button type="button" ng-click='savePractice(practiceForm)' class="btn btn-green btn-toggle btn-save hide" data-toggle="tooltip" data-placement="top" title="Save changes"><span class="dlicons-check"></span></button>
+                                    </div>
+
+                                    <div id="sectPractice" class="section-block">
+
+                                        <div class="input-block">
+                                            <input type="text" class="form-control data1" ng-model="practice.name" placeholder="Enter practice name &hellip;" value="Tooth Care Dental Clinic" disabled="disabled">
+                                            <label>Practice name</label>
+                                        </div>
+
+                                        <div class="input-block-inline-left">
+                                            <input type="text" class="form-control data1" ng-model="practice.address.street_line_1" placeholder="Enter street address &hellip;" disabled="disabled">
+                                            <label>Street address</label>
+                                        </div>
+
+                                        <div class="input-block-inline">
+                                            <input type="text" class="form-control data1" ng-model="practice.address.city" placeholder="Enter town / city &hellip;"  disabled="disabled">
+                                            <label>Town / City</label>
+                                        </div>
+
+                                        <div class="input-block-inline">
+                                            <input type="text" class="form-control data1" ng-model="practice.address.state" placeholder="Enter state &hellip;"  disabled="disabled">
+                                            <label>State</label>
+                                        </div>
+
+                                        <div class="input-block-inline-right">
+                                            <input type="text" class="form-control data1" ng-model="practice.address.zip" placeholder="Enter ZIP code &hellip;" disabled="disabled">
+                                            <label>ZIP code</label>
+                                        </div>
+
+                                        <div class="input-block-inline-left">
+                                            <input type="tel" class="form-control data1" ng-model="practice.address.phone" placeholder="Enter phone number &hellip;" disabled="disabled">
+                                            <label>Phone number</label>
+                                        </div>
+
+                                        <div class="input-block-inline website-block">
+                                            <input type="text" class="form-control data1" ng-model="practice.address.website" placeholder="Enter website address &hellip;"  disabled="disabled">
+                                            <label>Website</label>
+                                        </div>
+                                    </div>
+
+                                    <!--.section-block-->
+                                </form>
+                            </div>
+
+                        </tab>
+
+                        <tab>
+                            <tab-heading>
+                                <span class="dlicons-group"></span> Users
+                            </tab-heading>
+                            <!-- Users Tab -->
+                            <div id="admintabUsers">
+                                <div class="block-title">
+                                    <h2>Users</h2>
+                                    <button type="button" ng-click="usersDialog()" class="btn btn-orange btn-toggle btn-toggle-modal-user" data-toggle="tooltip" data-placement="top" title="Add a New User" data-target="#modalUser"><span class="dlicons-user-add"></span></button>
+                                </div>
+
+                                <div id="sectUsers" class="section-block">
+                                    <div class="table-wrapper">
+                                        <div class="table-container">
+                                            <table class="table table-hover table-striped">
+                                                <thead>
+                                                <tr>
+                                                    <th class="cell-user">Name</th>
+                                                    <th class="cell-username">Email</th>
+                                                    <th class="cell-created">Created on</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr  ng-repeat="user in practice.users">
+                                                    <td class="cell-user">{{user.first_name}} {{user.middle_initial}} {{user.last_name}}</td>
+                                                    <td class="cell-username">{{user.email}}</td>
+                                                    <td class="cell-created">
+                                                        <div delete-button class="button-block btn-delete">
+                                                            <span class="dlicons-remove"></span> Delete this user? <a ng-click="deleteUser(user)" class="link-green">Yes</a> | <a  class="link-orange">No</a>
+                                                        </div>
+                                                        <span class="create-date">{{user.created_at | date: 'mediumDate'}}</span>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div><!-- .table-container -->
+                                    </div><!-- .table-wrapper -->
+                                </div><!-- .section-block -->
+
+                            </div>
+                        </tab>
+                        <tab>
+                            <tab-heading>
+                                <span class="dlicons-user-add"></span> Invite Colleague
+
+                            </tab-heading>
+                            <!-- Invite Tab -->
+                            <div id="admintabInvite">
+                                <div class="block-title">
+                                    <h2>Invite Colleague</h2>
+                                    <button type="button" ng-click="inviteDialog()" class="btn btn-orange btn-toggle btn-toggle-modal-provider" data-toggle="tooltip" data-placement="top" title="Invite a New Provider" data-target="#modalProvider"><span class="dlicons-user-add"></span></button>
+                                </div>
+
+                                <div id="sectInvite" class="section-block">
+                                    <div class="table-wrapper">
+                                        <div class="table-container">
+                                            <table class="table table-hover table-striped">
+                                                <thead>
+                                                <tr>
+                                                    <th class="cell-provider">Provider's Name</th>
+                                                    <th class="cell-practice">Practice Name</th>
+                                                    <th class="cell-invited">Invited on</th>
+                                                    <th class="cell-status">Status</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr ng-repeat="provider in providers">
+                                                    <td class="cell-provider">{{provider.title}} {{provider.first_name}} {{provider.middle_initial}} {{provider.last_name}}</td>
+                                                    <td class="cell-practice">{{provider.registered_user.practice.name}}</td>
+                                                    <td class="cell-invited">{{provider.created_at | date: 'mediumDate'}}</td>
+                                                    <td class="cell-status">
+                                                        <div delete-button class="button-block btn-delete" ng-hide="provider.status === 'registered'">
+                                                            <span class="dlicons-remove"></span> Delete this user? <a ng-click="deleteProviderInvitation(provider)" class="link-green">Yes</a> | <a class="link-orange">No</a>
+                                                        </div>
+                                                        <span class="label" ng-class="{'label-success': provider.status == 'registered', 'label-info' : provider.status == 'invited'}">{{provider.status}}</span>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div><!-- .table-container -->
+                                    </div><!-- .table-wrapper -->
+
+                                </div><!-- .section-block -->
+
+                            </div>
+                        </tab>
+
+                    </tabset>
+
+                        
+                    </div><!-- .responsive-tab-content -->
+                    
+                </div><!-- .row -->
+                
+            </div><!-- .box-white -->

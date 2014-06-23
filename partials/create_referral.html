@@ -1,0 +1,197 @@
+<header class="page-header">
+    <h1>Create Referral</h1>
+    <p class="page-subheader">Fill out patient information for referral.</p>
+</header><!-- .page-header -->
+
+<!--<div ng-show="form.$dirty && form.$invalid" class="alert alert-danger">
+    <strong>Oops!</strong> Please fix the highlighted errors below.
+</div>-->
+
+<alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.message}}</alert>
+
+<div class="form-wrapper">
+<form id="formCreateReferral" name="form" novalidate="novalidate">
+<div class="box-white">
+
+<!-- Patient block -->
+<div class="row">
+    <div class="input-block col-xs-12 col-sm-12" ng-class="{'has-error': form.patient.$dirty && form.patient.$invalid }">
+        <div class="block-title">
+            <h2>Patient</h2>
+            <button type="button" class="btn btn-orange btn-toggle" ng-click="patientDialog()" data-toggle="tooltip" data-placement="top" title="Create a New Patient Record" data-target="#modalPatient"><span class="dlicons-user-add"></span></button>
+        </div>
+        <input type="text" class="form-control" name="patient" placeholder="Enter patient's name &hellip;" ng-model="patient" typeahead-editable="false" typeahead="p as p.first_name +' ' +  p.last_name for p in findPatient($viewValue) | filter:$viewValue" ng-required="true">
+    </div>
+</div><!-- .row -->
+
+<!-- Practice / Provider block -->
+<div class="row">
+    <div class="input-block-left col-xs-12 col-sm-6" ng-class="{'has-error': form.practice.$dirty && form.practice.$invalid }">
+        <div class="block-title">
+            <h2>Practice</h2>
+        </div>
+        <input type="text" class="form-control" name="practice" placeholder="Select practice &hellip;" ng-model="destinationPractice" typeahead-editable="false" typeahead-on-select="updatePracticeType($item, $model, $label)" typeahead="practice as practice.name for practice in findPractice($viewValue) | filter:$viewValue" ng-required="true">
+    </div>
+
+    <div class="input-block-right col-xs-12 col-sm-6" ng-class="{'has-error': form.provider.$dirty && form.provider.$invalid }">
+        <div class="block-title">
+            <h2>Provider</h2>
+            <button type="button" class="btn btn-orange btn-toggle" ng-click="providerDialog()" data-toggle="tooltip" data-placement="top" title="Invite a New Provider" data-target="#modalProvider"><span class="dlicons-user-add"></span></button>
+        </div>
+        <select id="selectProvider" name="provider" class="form-control" ng-disabled="!destinationPractice" ng-model="model.referral.dest_provider_id" ng-options="p.id as 'Dr. ' + p.first_name + ' ' + p.last_name for p in destinationPractice.users" ng-required="true">
+            <option disabled="disabled" class="placeholder" value="">Choose a provider &hellip;</option>
+        </select>
+    </div>
+</div><!-- .row -->
+
+<!-- Procedure block -->
+<div class="row">
+    <div class="input-block-left col-xs-12 col-sm-6" ng-class="{'has-error': form.practiceType.$dirty && form.practiceType.$invalid }">
+        <div class="block-title">
+            <h2>Referral type</h2>
+        </div>
+        <select id="selectRefType" class="form-control" name="practiceType" ng-model="practiceType"  ng-options="p as p.name for p in practiceTypes" ng-required="true">
+            <option disabled="disabled" class="placeholder" value="">Select type &hellip;</option>
+        </select>
+    </div>
+
+    <div class="input-block-right col-xs-12 col-sm-6" ng-class="{'has-error': form.procedure.$dirty && form.procedure.$invalid }">
+        <div class="block-title">
+            <h2>Procedure</h2>
+        </div>
+        <select id="selectProcedure" ng-disabled="!practiceType" name="procedure" class="form-control" ng-model="model.referral.procedure_id"  ng-options="p.id as p.name for p in practiceType.procedures" ng-required="true">
+            <option disabled="disabled" class="placeholder" value="">Select procedure &hellip;</option>
+        </select>
+    </div>
+</div><!-- .row -->
+
+<!-- Tooth Chart block -->
+<div class="row">
+    <div class="input-block col-xs-12 col-sm-12">
+        <div class="block-title">
+            <h2>Tooth Chart</h2>
+        </div>
+
+        <div class="toothchart-wrapper">
+            <div id="toothchart">
+                <div class="upper-chart">
+
+                    <!-- Tooth 1-8 -->
+                    <ul>
+                        <li class="tooth-button" ng-repeat="item in ['1','2','3','4','5','6','7','8']">
+                            <input type="checkbox" ng-click="toggleTooth(item)" ng-checked="teeth && teeth.indexOf(item)!= -1">
+                            <label>{{item}}</label>
+                        </li>
+                    </ul>
+
+                    <!-- Tooth 9-16 -->
+                    <ul>
+                        <li class="tooth-button" ng-repeat="item in ['9','10','11','12','13','14','15','16']">
+                            <input type="checkbox" ng-click="toggleTooth(item)" ng-checked="teeth && teeth.indexOf(item)!= -1">
+                            <label>{{item}}</label>
+                        </li>
+                    </ul>
+
+                </div>
+                <div class="lower-chart">
+
+                    <!-- Tooth 17-24 -->
+                    <ul>
+                        <li class="tooth-button" ng-repeat="item in ['17','18','19','20','21','22','23','24']">
+                            <input type="checkbox" ng-click="toggleTooth(item)" ng-checked="teeth && teeth.indexOf(item)!= -1">
+                            <label>{{item}}</label>
+                        </li>
+                    </ul>
+
+                    <!-- Tooth 25-32 -->
+                    <ul>
+                        <li class="tooth-button" ng-repeat="item in ['25','26','27','28','29','30','31','32']">
+                            <input type="checkbox" ng-click="toggleTooth(item)" ng-checked="teeth && teeth.indexOf(item)!= -1">
+                            <label>{{item}}</label>
+                        </li>
+                    </ul>
+
+                </div>
+            </div><!-- #toothchart -->
+        </div><!-- .toothchart-wrapper -->
+
+    </div>
+</div><!-- .row -->
+
+<!-- Attachments block -->
+<div class="row">
+    <div class="input-block col-xs-12 col-sm-12">
+        <div class="block-title">
+            <h2>Attachments</h2>
+            <label class="btn btn-orange btn-toggle" data-toggle="tooltip" data-placement="top" title="Add Attachment">
+                <input ng-file-select type="file" style="display: none;" multiple>
+                <span class="dlicons-plus"></span>
+            </label>
+
+        </div>
+
+        <alert ng-repeat="alert in attachment_alerts" type="alert.type" close="closeAttachmentAlert($index)">{{alert.message}}</alert>
+
+        <div class="attachments-wrapper">
+            <div class="my-drop-zone" ng-file-drop ng-file-over="another-file-over-class">
+            <ul>
+                <!-- Attachments on server -->
+                <li class="attachment-block" ng-repeat="attachment in attachments">
+                    <a href="{{attachment.filename}}">
+                        <div class="attachment-thumb" attachment-thumb="{{attachment.filename}}">
+                            <img ng-if="isImage(attachment)" access="admin, doctor" ng-src="{{attachment.filename}}" total-images="{{attachments.length}}" crossorigin="anonymous" alt="img">
+                        </div>
+                        <div class="attachment-details">
+                            <span class="filename">{{attachment.filename | filename}}</span>
+                            <span class="datestamp">{{attachment.created_at | date: 'mediumDate'}}</span>
+                        </div>
+                    </a>
+                </li>
+
+                <!-- Attachments in the queue, no links -->
+                <li class="attachment-block" ng-repeat="item in uploader.queue">
+                        <div class="attachment-thumb" ng-show="uploader.isHTML5"
+                             ng-thumb="{ file: item.file, height: 80, width:80 }">
+                            <!-- no img, canvas is automatically generated here -->
+                        </div>
+                        <div class="attachment-details" >
+                            <span class="filename">{{ item.file.name }}</span>
+                            <span class="datestamp">{{ now() | date: 'mediumDate'}}</span>
+                        </div>
+                </li>
+            </ul>
+            </div>
+        </div><!-- .attachments-wrapper -->
+    </div>
+</div><!-- .row -->
+
+<!-- Notes block -->
+<div class="row">
+    <div class="input-block col-xs-12 col-sm-12">
+        <div class="block-title">
+            <h2>Notes</h2>
+            <button type="button" class="btn btn-orange btn-toggle" ng-click="noteDialog()" data-toggle="tooltip" data-placement="top" title="Add New Note" data-target="#modalNote"><span class="dlicons-plus"></span></button>
+        </div>
+
+        <div class="notes-wrapper">
+            <ul>
+                <!-- Note block -->
+                <li class="note-block" expand-note ng-repeat="note in model.referral.notes_attributes">
+                    <span class="note-content">{{note.message}}</span>
+                    <span class="datestamp">{{note.created_at | date: 'short' }}</span>
+                </li>
+
+            </ul>
+        </div><!-- .notes-wrapper -->
+    </div>
+</div><!-- .row -->
+
+</div><!-- .box-white -->
+
+<div class="button-block">
+    <button class="btn btn-green btn-lg" ng-click="saveTemplate(model)" ng-disabled="form.$invalid">Save</button>
+    <button  class="btn btn-orange btn-lg" access="admin, doctor" ng-click="createReferral(model)" ng-disabled="form.$invalid">Sign &amp; Send</button>
+</div><!-- .button-block -->
+</form>
+</div><!-- .form-wrapper -->
+
